@@ -1,18 +1,42 @@
-import Navbar from './components/Navbar.jsx';
-import Footer from './components/Footer.jsx';
+import React, { useState } from 'react';
+import HomePage from './pages/HomePage.jsx';
+import PackagesPage from './pages/PackagesPage.jsx';
+import CalendarPage from './pages/CalendarPage.jsx';
+import PlaceholderPage from './pages/PlaceholderPage.jsx';
 
 function App() {
+  const [currentPage, setCurrentPage] = useState('home');
+  const [selectedPackage, setSelectedPackage] = useState(null);
+
+  const handleNavigate = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handlePackageSelect = (packageData, scenario) => {
+    setSelectedPackage({ ...packageData, selectedScenario: scenario });
+  };
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'calendar':
+        return <CalendarPage onNavigate={handleNavigate} />;
+      case 'packages':
+        return <PackagesPage onNavigate={handleNavigate} onPackageSelect={handlePackageSelect} />;
+      case 'brands':
+        return <PlaceholderPage pageName="Marcas" onNavigate={handleNavigate} />;
+      case 'quiz':
+        return <PlaceholderPage pageName="Quiz" onNavigate={handleNavigate} />;
+      case 'home':
+      default:
+        return <HomePage onNavigate={handleNavigate} />;
+    }
+  };
+
   return (
-    <div className="flex flex-col min-h-screen bg-gray-800 text-white">
-      <Navbar />
-      <main className="flex-grow flex items-center justify-center">
-        {/* El contenido de tus páginas irá aquí */}
-        <h1 className="text-4xl font-bold">¡Mi Esqueleto de App Funciona!</h1>
-      </main>
-      <Footer />
+    <div>
+      {renderPage()}
     </div>
-  )
+  );
 }
 
 export default App;
-
